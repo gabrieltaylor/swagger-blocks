@@ -54,7 +54,11 @@ module Swagger
       end
 
       def swagger_component(inline_keys = nil, &block)
-        @swagger_components_node ||= Swagger::Blocks::Nodes::ComponentNode.call(version: '3.0.0', inline_keys: inline_keys, &block)
+        if @swagger_components_node
+          @swagger_components_node.instance_eval(&block)
+        else
+          @swagger_components_node = Swagger::Blocks::Nodes::ComponentNode.call(version: '3.0.0', inline_keys: inline_keys, &block)
+        end
       end
 
       def _swagger_nodes
